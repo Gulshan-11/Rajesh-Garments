@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BsPlusSquare, BsDashSquare } from "react-icons/bs";
+// import { BsPlusSquare, BsDashSquare } from "react-icons/bs";
 import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import Header from "../Header";
@@ -53,6 +53,15 @@ const ProductItemDetails = () => {
     const { brand, imageUrl, rating, title, stock, category } = productData;
 
     const onClickAddToCart = () => {
+      if(quantity > stock || quantity<1){
+        swal({
+          title: "Error",
+          text: "Please enter a valid quantity",
+          icon: "error",
+          button: "Ok",
+        })
+        return
+      }
       const existingCartData =
         JSON.parse(localStorage.getItem("cartItems")) || [];
       const existingProductIndex = existingCartData.findIndex(
@@ -135,7 +144,7 @@ const ProductItemDetails = () => {
                   className="quantity-controller-value"
                   value={quantity}
                   onChange={(e) => {const newValue = parseInt(e.target.value);
-                    setQuantity(newValue >= 1 ? newValue : 1);}}
+                    setQuantity(newValue);}}
                 />
               </div>
               <button

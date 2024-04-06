@@ -6,6 +6,7 @@ const CartListView = ({cartList, setCartList}) => (
     {cartList.map((eachCartItem, index) => (
       <CartItem
         key={index}
+        cartItemId={index}
         cartItemDetails={eachCartItem}
         cartList={cartList}
         setCartList={setCartList}

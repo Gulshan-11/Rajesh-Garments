@@ -2,42 +2,51 @@ import {BsPlusSquare, BsDashSquare} from 'react-icons/bs'
 import {AiFillCloseCircle} from 'react-icons/ai'
 import './index.css'
 
-const CartItem = ({cartItemDetails, cartList, setCartList}) => {
-  const {id, title, brand, quantity, selectedPrice, imageUrl, selectedSize} = cartItemDetails
-  console.log(
-    '🚀 ~ file: index.jsx:CartItem ~ cartItemDetails',
-    cartItemDetails,
-  )
+const CartItem = ({cartItemId, cartItemDetails, cartList, setCartList}) => {
+  const {title, brand, quantity, selectedPrice, imageUrl, selectedSize} = cartItemDetails
 
   const onClickDecrement = () => {
-    if (quantity === 1) {
-      // If the quantity is 1, remove the item from the cartList
-      const updatedCartList = cartList.filter(item => item.id !== id)
-      setCartList(updatedCartList)
+    const updatedCartList = cartList.map((item, index) => {
+      // console.log(index,key)
+        if (index === cartItemId) {
+            // If the item is the kth item, decrement its quantity
+            if(item.quantity !== 1) {  
+              return {...item, quantity: item.quantity - 1}
+            }
+        }
+        return item;
+    });
+    setCartList(updatedCartList)
       // Update local storage with updated cart data
       localStorage.setItem('cartItems', JSON.stringify(updatedCartList))
-    } else {
-      // If the quantity is greater than 1, decrement the quantity
-      const updatedCartList = cartList.map(item =>
-        item.id === id ? {...item, quantity: item.quantity - 1} : item,
-      )
-      setCartList(updatedCartList)
-      // Update local storage with updated cart data
-      localStorage.setItem('cartItems', JSON.stringify(updatedCartList))
-    }
   }
 
   const onClickIncrement = () => {
-    const updatedCartList = cartList.map(item =>
-      item.id === id ? {...item, quantity: item.quantity + 1} : item,
-    )
+    const updatedCartList = cartList.map((item, index) => {
+      // console.log(index,key)
+        if (index === cartItemId) {
+            // If the item is the kth item, decrement its quantity
+            if(item.quantity !== 1) {  
+              return {...item, quantity: item.quantity + 1}
+            }
+        }
+        return item;
+    });
     setCartList(updatedCartList)
     // Update local storage with updated cart data
     localStorage.setItem('cartItems', JSON.stringify(updatedCartList))
   }
 
   const onRemoveCartItem = () => {
-    const updatedCartList = cartList.filter(item => item.id !== id)
+    const updatedCartList = [];
+    for (let index = 0; index < cartList.length; index++) {
+        const item = cartList[index];
+        if (index !== cartItemId) {
+            // If the index is not equal to cartItemId, add the item to the updatedCartList
+            updatedCartList.push(item);
+        }
+    }
+
     setCartList(updatedCartList)
     // Update local storage with updated cart data
     localStorage.setItem('cartItems', JSON.stringify(updatedCartList))
